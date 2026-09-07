@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://chivvflooring.com/sitemap.xml
