@@ -1,0 +1,9 @@
+{
+  "name": "chivv-flooring-website",
+  "version": "10.0.0",
+  "private": true,
+  "description": "Static CHIVV Flooring lead-generation website",
+  "scripts": {
+    "audit": "node scripts/audit-site.mjs"
+  }
+}
