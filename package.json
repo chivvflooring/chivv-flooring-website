@@ -4,6 +4,8 @@
   "private": true,
   "description": "Static CHIVV Flooring lead-generation website",
   "scripts": {
-    "audit": "node scripts/audit-site.mjs"
+    "audit": "node scripts/audit-site.mjs",
+    "test:lead-source": "node scripts/test-lead-source.mjs",
+    "check": "npm run audit && npm run test:lead-source"
   }
 }
