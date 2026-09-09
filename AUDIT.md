@@ -18,7 +18,7 @@ Updated September 7, 2026. This repository has not been deployed by Codex.
 
 1. Confirm the exact Google Business Profile name and current public-profile URLs before changing profile references.
 2. Connect Google Search Console to the apex-domain property and resubmit the apex sitemap after an approved deployment.
-3. Configure GA4 and conversion tracking for `phone_click` and `estimate_form_submit`; verify events before relying on reports.
+3. Configure GA4 and conversion tracking for `phone_click` and `estimate_form_attempt`; verify events before relying on reports.
 4. Confirm where Netlify form notifications should be delivered and submit a real test lead after deployment approval.
 5. Replace or expand the two current project images only with CHIVV-owned, approved project photography and factual project details.
 6. Build detailed case studies and strengthen city pages with unique, locally relevant proof before adding more locations.
@@ -27,3 +27,6 @@ Updated September 7, 2026. This repository has not been deployed by Codex.
 ## Content quality note
 
 The existing city pages are serviceable foundations, but several share a common structure and limited local proof. They should not be multiplied into additional thin pages. The next content phase should add unique project evidence, flooring conditions, housing context, FAQs, and internal links based on real CHIVV work in each priority city.
+
+
+See AUDIT-2026-09-09.md for the newer source audit, safe follow-up fixes and outstanding live verification.

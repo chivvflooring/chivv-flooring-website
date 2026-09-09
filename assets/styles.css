@@ -170,3 +170,14 @@ footer{background:#090909;color:#aaa;padding:34px 0}
 @media(max-width:900px){
  .review-wrap,.review-themes,.location-services,.review-page-grid{grid-template-columns:1fr}
 }
+
+/* Keep narrow-screen controls within their grid cells and clear of device insets. */
+form > *, .hero-copy, .review-wrap > * { min-width: 0; }
+input, select, textarea { font-size: 16px; }
+a:focus-visible, button:focus-visible { outline: 3px solid #ff7479; outline-offset: 3px; }
+@media (max-width: 900px) {
+  .mobile-cta { padding-bottom: env(safe-area-inset-bottom, 0px); background: #171717; }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  .pagehero h1, .success h1 { font-size: clamp(2rem, 8vw, 2.5rem); overflow-wrap: break-word; }
+  .rating-number { font-size: clamp(2rem, 9vw, 3.875rem); }
+}
