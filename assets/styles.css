@@ -170,3 +170,64 @@ footer{background:#090909;color:#aaa;padding:34px 0}
 @media(max-width:900px){
  .review-wrap,.review-themes,.location-services,.review-page-grid{grid-template-columns:1fr}
 }
+
+/* Keep narrow-screen controls within their grid cells and clear of device insets. */
+form > *, .hero-copy, .review-wrap > * { min-width: 0; }
+input, select, textarea { font-size: 16px; }
+a:focus-visible, button:focus-visible { outline: 3px solid #ff7479; outline-offset: 3px; }
+@media (max-width: 900px) {
+  .mobile-cta { padding-bottom: env(safe-area-inset-bottom, 0px); background: #171717; }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  .pagehero h1, .success h1 { font-size: clamp(2rem, 8vw, 2.5rem); overflow-wrap: break-word; }
+  .rating-number { font-size: clamp(2rem, 9vw, 3.875rem); }
+}
+
+/* Shared additions retain the original CHIVV palette and components. */
+img { height: auto; }
+.hero-image img, .gallery-card img { height: 100%; }
+.content a:not(.btn):not(.social-link), .form-note a { text-decoration: underline; text-underline-offset: 3px; }
+.honeypot { display: none; }
+.skip-link { position: absolute; top: 0; left: 12px; transform: translateY(-150%); z-index: 100; padding: 12px 18px; background: #fff; color: #171717; }
+.skip-link:focus { transform: translateY(0); }
+.project-faq, .process-detail { padding: 20px; border: 1px solid var(--line); background: #fff; color: #171717; }
+.project-faq + .project-faq { margin-top: 12px; }
+.project-faq summary, .process-detail summary { cursor: pointer; font-weight: 800; min-height: 24px; }
+.project-faq summary:focus-visible, .process-detail summary:focus-visible { outline: 3px solid #d71920; outline-offset: 4px; }
+.process-detail b { color: var(--red); margin-right: 8px; }
+.footer { grid-template-columns: 1.2fr 1fr 1fr 1fr; }
+.footer a { padding: 5px 0; }
+.social-link { min-height: 44px; }
+.navlinks { gap: 16px; }
+.hero-copy h1 { font-size: clamp(2rem, 4.1vw, 3.4rem); overflow-wrap: break-word; }
+#main-content:focus { outline: none; }
+input, select, textarea { min-width: 0; max-width: 100%; }
+@media (max-width: 1050px) and (min-width: 901px) {
+  .nav { gap: 12px; }
+  .navlinks { gap: 10px; }
+  .navlinks a { font-size: 11px; }
+  .navlinks .btn { padding: 12px; }
+  .brand-name { font-size: 22px; }
+}
+@media (max-width: 900px) {
+  .footer { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .hero-actions .btn { flex: 1 1 210px; }
+  .navlinks { max-height: calc(100dvh - 145px); overflow-y: auto; }
+  html:not(.js) header { position: static; }
+  html:not(.js) .nav { height: auto; flex-wrap: wrap; padding-top: 12px; }
+  html:not(.js) .nav-toggle { display: none; }
+  html:not(.js) .navlinks { display: flex; position: static; width: 100%; max-height: none; box-shadow: none; }
+  .section-head h2, .content h2, .split h2 { font-size: clamp(1.6rem, 6vw, 2.2rem); }
+}
+@media (max-width: 480px) {
+  .footer { grid-template-columns: 1fr; }
+  .wrap { padding-left: 18px; padding-right: 18px; }
+  .hero-copy { padding-left: 18px; padding-right: 18px; }
+  .hero-actions { width: 100%; }
+  .mobile-cta a { min-height: 52px; display: flex; align-items: center; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}
+
+#estimate-form { scroll-margin-top: 96px; }

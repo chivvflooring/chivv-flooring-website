@@ -19,43 +19,14 @@ document.addEventListener('DOMContentLoaded', function(){
       link.addEventListener('click', closeNavigation);
     });
     document.addEventListener('keydown', function(event){
-      if(event.key === 'Escape') closeNavigation();
+      if(event.key === 'Escape' && navigation.classList.contains('open')) {
+        closeNavigation();
+        navToggle.focus();
+      }
     });
   }
 
-  // Only one process card open at a time
-  document.querySelectorAll('.process').forEach(function(group){
-    const cards = group.querySelectorAll('.step');
-    cards.forEach(function(card){
-      card.setAttribute('tabindex','0');
-      card.setAttribute('role','button');
-      card.setAttribute('aria-expanded','false');
-      function toggle(){
-        const willOpen = !card.classList.contains('open');
-        cards.forEach(function(c){c.classList.remove('open'); c.setAttribute('aria-expanded','false');});
-        if(willOpen){card.classList.add('open'); card.setAttribute('aria-expanded','true');}
-      }
-      card.addEventListener('click', toggle);
-      card.addEventListener('keydown', function(e){
-        if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}
-      });
-    });
-  });
-
-  // FAQ accordion
-  document.querySelectorAll('.faq-item').forEach(function(item){
-    const q=item.querySelector('.faq-q');
-    if(!q) return;
-    q.setAttribute('tabindex','0');
-    q.setAttribute('role','button');
-    q.setAttribute('aria-expanded','false');
-    function toggle(){
-      const isOpen = item.classList.toggle('open');
-      q.setAttribute('aria-expanded', String(isOpen));
-    }
-    q.addEventListener('click',toggle);
-    q.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
-  });
+  // Process and FAQ content uses native details/summary elements.
 
   // Preserve the first landing source within this browser tab for up to 30 minutes.
   // Store only campaign fields and paths, never form contents or arbitrary query strings.
@@ -85,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function(){
       const field = estimateForm.querySelector('[name="' + key + '"]');
       if(field) field.value = typeof source[key] === 'string' ? source[key].slice(0,500) : '';
     });
-    estimateForm.addEventListener('submit', function(){
+    estimateForm.addEventListener('submit', function(event){
+      if(event && event.defaultPrevented) return;
       // An attempt is not a delivered lead. Confirm delivery in Netlify before reporting conversions.
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({event:'estimate_form_attempt', form_name:'estimate-request'});
