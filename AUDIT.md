@@ -30,3 +30,5 @@ The existing city pages are serviceable foundations, but several share a common 
 
 
 See AUDIT-2026-09-09.md for the newer source audit, safe follow-up fixes and outstanding live verification.
+
+Current follow-up implementation and review status: REVIEW-2026-09-09.md. Preserved claims requiring evidence: CLAIMS-TO-VERIFY.md.
