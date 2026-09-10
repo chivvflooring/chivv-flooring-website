@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // Store only campaign fields and paths, never form contents or arbitrary query strings.
   const sourceKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid'];
   const sourceStorageKey = 'chivv_lead_source_v1';
+  const pendingLeadKey = 'chivv_pending_lead_v1';
   const params = new URLSearchParams(window.location.search);
   const now = Date.now();
   let source = null;
@@ -87,9 +88,24 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     estimateForm.addEventListener('submit', function(){
       // An attempt is not a delivered lead. Confirm delivery in Netlify before reporting conversions.
+      try { window.sessionStorage.setItem(pendingLeadKey, String(Date.now())); } catch(error) {}
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({event:'estimate_form_attempt', form_name:'estimate-request'});
     });
+  }
+
+  // Count a lead only after Netlify redirects a submitted form to this confirmation page.
+  // The short-lived marker prevents refreshes and direct visits from creating conversions.
+  if(document.body && document.body.dataset.page === 'lead-confirmation'){
+    let submittedAt = 0;
+    try {
+      submittedAt = Number(window.sessionStorage.getItem(pendingLeadKey));
+      window.sessionStorage.removeItem(pendingLeadKey);
+    } catch(error) { /* Confirmation content still works when browser storage is unavailable. */ }
+    if(Number.isFinite(submittedAt) && submittedAt > 0 && now >= submittedAt && now - submittedAt < 30 * 60 * 1000){
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({event:'generate_lead', form_name:'estimate-request'});
+    }
   }
 
   document.querySelectorAll('a[href^="tel:"]').forEach(function(link){
