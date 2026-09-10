@@ -3,7 +3,7 @@ import vm from 'node:vm';
 const code = fs.readFileSync(new URL('../assets/site.js', import.meta.url), 'utf8');
 
 function check(value, message){ if(!value) throw new Error(message); }
-function visit(run, storage, href, referrer, hasForm, blocked){
+function visit(run, storage, href, referrer, hasForm, blocked, confirmation){
   const fields = {};
   const handlers = {};
   const form = {
@@ -14,11 +14,13 @@ function visit(run, storage, href, referrer, hasForm, blocked){
     location: new URL(href),
     sessionStorage: {
       getItem: function(key){ if(blocked) throw new Error('disabled'); return storage[key] || null; },
-      setItem: function(key, value){ if(blocked) throw new Error('disabled'); storage[key] = value; }
+      setItem: function(key, value){ if(blocked) throw new Error('disabled'); storage[key] = value; },
+      removeItem: function(key){ if(blocked) throw new Error('disabled'); delete storage[key]; }
     }
   };
   const document = {
     referrer:referrer,
+    body:{dataset:confirmation ? {page:'lead-confirmation'} : {}},
     addEventListener: function(event, fn){ if(event === 'DOMContentLoaded') fn(); },
     querySelector: function(selector){ return hasForm && selector === 'form[name="estimate-request"]' ? form : null; },
     querySelectorAll: function(){ return []; }
@@ -36,6 +38,10 @@ function suite(run){
   check(!JSON.stringify(storage).includes('private'), 'Arbitrary query must not be stored');
   contact.handlers.submit();
   check(contact.window.dataLayer[0].event === 'estimate_form_attempt', 'Submission attempt must not claim delivery');
+  const confirmation = visit(run, storage, 'https://chivvflooring.com/thank-you.html', 'https://chivvflooring.com/contact.html', false, false, true);
+  check(confirmation.window.dataLayer[0].event === 'generate_lead', 'Confirmation must report a delivered lead');
+  const refresh = visit(run, storage, 'https://chivvflooring.com/thank-you.html', '', false, false, true);
+  check(!refresh.window.dataLayer, 'Confirmation refresh must not duplicate a lead');
   const facebook = visit(run, storage, 'https://chivvflooring.com/contact.html?utm_source=facebook&utm_medium=social', '', true);
   check(facebook.fields.utm_source.value === 'facebook' && facebook.fields.utm_campaign.value === '', 'New campaign must replace old campaign without mixing');
   const blocked = visit(run, {}, 'https://chivvflooring.com/contact.html?utm_source=instagram', '', true, true);

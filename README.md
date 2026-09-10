@@ -27,4 +27,4 @@ The audit checks page metadata, canonical URLs, sitemap coverage, local links, i
 - Services: hardwood installation, refinishing, engineered hardwood, LVP/laminate, stairs/trim, floor preparation
 - Areas: Alpharetta, Johns Creek, Milton, Roswell, Cumming, Marietta, Kennesaw, Atlanta
 
-The form is configured for Netlify Forms and redirects successful submissions to `/thank-you.html`.
+The form is configured for Netlify Forms and redirects successful submissions to `/thank-you.html`. The front end emits `estimate_form_attempt` when a valid form is submitted, `generate_lead` once after the confirmation redirect, and `phone_click` for telephone links. These `dataLayer` events remain inert until an owner-approved analytics container is installed.
