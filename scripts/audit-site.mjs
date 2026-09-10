@@ -28,6 +28,7 @@ for (const file of htmlFiles) {
   if (count(/<meta name="description" content="[^"]+">/gi) !== 1) errors.push(`${relative}: expected one meta description`);
   if (count(/<h1(?:\s[^>]*)?>[\s\S]*?<\/h1>/gi) !== 1) errors.push(`${relative}: expected one h1`);
   if (!html.includes('678-571-7028') || !html.includes('tel:+16785717028')) errors.push(`${relative}: missing required phone CTA`);
+  if (!html.includes('sms:+16785717028')) errors.push(`${relative}: missing required text CTA`);
   if (html.includes('https://www.chivvflooring.com')) errors.push(`${relative}: found forbidden www canonical hostname`);
   if (!isUtilityPage) {
     const canonical = html.match(/<link rel="canonical" href="([^"]+)">/i)?.[1];
@@ -40,7 +41,7 @@ for (const file of htmlFiles) {
 
   for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     const target = match[1];
-    if (/^(?:https?:|tel:|mailto:|#)/.test(target)) continue;
+    if (/^(?:https?:|tel:|sms:|mailto:|#)/.test(target)) continue;
     const cleanTarget = target.split('#')[0].split('?')[0];
     if (!cleanTarget) continue;
     const resolved = cleanTarget.startsWith('/')
@@ -65,6 +66,15 @@ const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
 if (sitemap.includes('https://www.chivvflooring.com')) errors.push('sitemap.xml: found forbidden www hostname');
 for (const canonical of canonicalUrls) {
   if (!sitemap.includes(`<loc>${canonical}</loc>`)) errors.push(`sitemap.xml: missing ${canonical}`);
+}
+
+const contact = fs.readFileSync(path.join(root, 'contact.html'), 'utf8');
+for (const field of ['name','phone','email','city','service','square-feet','timeline','project','project-photos','landing_page','page_context','referrer_host','utm_source','utm_medium','utm_campaign']) {
+  if (!contact.includes(`name="${field}"`)) errors.push(`contact.html: missing estimate field ${field}`);
+}
+const trackingScript = fs.readFileSync(path.join(root, 'assets/site.js'), 'utf8');
+for (const eventName of ['phone_click','text_click','estimate_cta_click','estimate_form_attempt','generate_lead']) {
+  if (!trackingScript.includes(`event:'${eventName}'`)) errors.push(`assets/site.js: missing event ${eventName}`);
 }
 
 console.log(`Audited ${htmlFiles.length} HTML pages.`);

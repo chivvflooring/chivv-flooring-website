@@ -24,7 +24,7 @@ The audit checks page metadata, canonical URLs, sitemap coverage, local links, i
 ## Current routes
 
 - Core: home, about, reviews, contact
-- Services: hardwood installation, refinishing, engineered hardwood, LVP/laminate, stairs/trim, floor preparation
-- Areas: Alpharetta, Johns Creek, Milton, Roswell, Cumming, Marietta, Kennesaw, Atlanta
+- Services: hardwood installation, refinishing, engineered hardwood, LVP/laminate, stairs/trim, floor preparation, flooring replacement, and bathroom/shower/tile remodeling
+- Priority areas: Johns Creek/30022, Alpharetta, Sandy Springs, Buckhead/Atlanta, Roswell, Milton, Brookhaven, Dunwoody, East Cobb/Marietta, and Cumming
 
-The form is configured for Netlify Forms and redirects successful submissions to `/thank-you.html`. The front end emits `estimate_form_attempt` when a valid form is submitted, `generate_lead` once after the confirmation redirect, and `phone_click` for telephone links. These `dataLayer` events remain inert until an owner-approved analytics container is installed.
+The form is configured for Netlify Forms and redirects successful submissions to `/thank-you.html`. The front end emits privacy-conscious `estimate_cta_click`, `estimate_form_attempt`, `generate_lead`, `phone_click`, and `text_click` events with the page path but no form contents. These `dataLayer` events remain inert until an owner-approved analytics container is installed.
