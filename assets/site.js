@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // Store only campaign fields and paths, never form contents or arbitrary query strings.
   const sourceKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid'];
   const sourceStorageKey = 'chivv_lead_source_v1';
+  const estimateContextKey = 'chivv_estimate_context_v1';
   const pendingLeadKey = 'chivv_pending_lead_v1';
   const params = new URLSearchParams(window.location.search);
   const now = Date.now();
@@ -81,6 +82,13 @@ document.addEventListener('DOMContentLoaded', function(){
     try { window.sessionStorage.setItem(sourceStorageKey, JSON.stringify(source)); } catch(error) {}
   }
   const pageContext = window.location.pathname || '/';
+  let estimateContext = '';
+  try {
+    const savedContext = JSON.parse(window.sessionStorage.getItem(estimateContextKey));
+    if(savedContext && typeof savedContext === 'object' && typeof savedContext.captured_at === 'number' &&
+       now >= savedContext.captured_at && now - savedContext.captured_at < 30 * 60 * 1000 &&
+       typeof savedContext.page_context === 'string') estimateContext = savedContext.page_context;
+  } catch(error) { /* Context falls back to the current page when storage is unavailable. */ }
   const estimateForm = document.querySelector('form[name="estimate-request"]');
   if(estimateForm){
     sourceKeys.concat(['landing_page','referrer_host']).forEach(function(key){
@@ -88,7 +96,8 @@ document.addEventListener('DOMContentLoaded', function(){
       if(field) field.value = typeof source[key] === 'string' ? source[key].slice(0,500) : '';
     });
     const contextField = estimateForm.querySelector('[name="page_context"]');
-    if(contextField) contextField.value = pageContext.slice(0,500);
+    // Attribute the request to the page where the visitor chose Estimate, not merely the form URL.
+    if(contextField) contextField.value = (estimateContext || pageContext).slice(0,500);
     const requestedService = (params.get('service') || '').slice(0,100);
     const serviceField = estimateForm.querySelector('[name="service"]');
     if(requestedService && serviceField){
@@ -102,23 +111,33 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     estimateForm.addEventListener('submit', function(){
       // An attempt is not a delivered lead. Confirm delivery in Netlify before reporting conversions.
-      try { window.sessionStorage.setItem(pendingLeadKey, String(Date.now())); } catch(error) {}
+      const attribution = {
+        submitted_at:Date.now(),
+        landing_page:typeof source.landing_page === 'string' ? source.landing_page.slice(0,500) : '',
+        page_context:(estimateContext || pageContext).slice(0,500),
+        referrer_host:typeof source.referrer_host === 'string' ? source.referrer_host.slice(0,200) : '',
+        utm_source:typeof source.utm_source === 'string' ? source.utm_source.slice(0,200) : '',
+        utm_medium:typeof source.utm_medium === 'string' ? source.utm_medium.slice(0,200) : '',
+        utm_campaign:typeof source.utm_campaign === 'string' ? source.utm_campaign.slice(0,200) : ''
+      };
+      try { window.sessionStorage.setItem(pendingLeadKey, JSON.stringify(attribution)); } catch(error) {}
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({event:'estimate_form_attempt', form_name:'estimate-request', page_context:pageContext});
+      window.dataLayer.push(Object.assign({event:'estimate_form_attempt', form_name:'estimate-request'}, attribution));
     });
   }
 
   // Count a lead only after Netlify redirects a submitted form to this confirmation page.
   // The short-lived marker prevents refreshes and direct visits from creating conversions.
   if(document.body && document.body.dataset.page === 'lead-confirmation'){
-    let submittedAt = 0;
+    let pendingLead = null;
     try {
-      submittedAt = Number(window.sessionStorage.getItem(pendingLeadKey));
+      pendingLead = JSON.parse(window.sessionStorage.getItem(pendingLeadKey));
       window.sessionStorage.removeItem(pendingLeadKey);
     } catch(error) { /* Confirmation content still works when browser storage is unavailable. */ }
+    const submittedAt = pendingLead && Number(pendingLead.submitted_at);
     if(Number.isFinite(submittedAt) && submittedAt > 0 && now >= submittedAt && now - submittedAt < 30 * 60 * 1000){
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({event:'generate_lead', form_name:'estimate-request'});
+      window.dataLayer.push(Object.assign({event:'generate_lead', form_name:'estimate-request'}, pendingLead));
     }
   }
 
@@ -136,8 +155,17 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   document.querySelectorAll('a[href*="contact.html"]').forEach(function(link){
     link.addEventListener('click', function(){
+      const context = {captured_at:Date.now(), page_context:pageContext};
+      try { window.sessionStorage.setItem(estimateContextKey, JSON.stringify(context)); } catch(error) {}
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({event:'estimate_cta_click', page_context:pageContext});
+      window.dataLayer.push({
+        event:'estimate_cta_click',
+        page_context:pageContext,
+        landing_page:typeof source.landing_page === 'string' ? source.landing_page : '',
+        utm_source:typeof source.utm_source === 'string' ? source.utm_source : '',
+        utm_medium:typeof source.utm_medium === 'string' ? source.utm_medium : '',
+        utm_campaign:typeof source.utm_campaign === 'string' ? source.utm_campaign : ''
+      });
     });
   });
 });
