@@ -49,3 +49,18 @@ A sustainable starting cadence is two useful feed posts or reels weekly plus sto
 ## Measurement
 
 Report by source, campaign, landing page, source-page context, Call/Text/Estimate engagement, form attempts, confirmed leads, qualified leads, and booked outcomes. Form contents stay in Netlify/owner-approved lead systems, not data-layer payloads or browser analytics/storage. The owner should reconcile results monthly and pause campaigns producing low-quality or out-of-area inquiries.
+
+## September 2026 research note and Meta readiness
+
+Live public Instagram/Facebook discovery was attempted for Atlanta flooring, hardwood, remodeling, before/after and local renovation topics. The environment's web endpoint returned HTTP 401 and its HTTPS proxy returned HTTP 403, so no account, engagement number, hashtag popularity or current platform behavior is asserted here. Validate formats in the live apps before production.
+
+Reusable, original formats for owner-approved evidence: before/after carousels; 15–30 second finished-first walkthroughs; removal/preparation/install sequences; glue-down/nail-down education when factually applicable; staircase details; bathroom/shower transformations; homeowner planning mistakes; estimate-preparation checklists; and a finished-project showcase linked to the closest service guide. Captions should open with the homeowner decision, explain 1–3 factual details, identify only a verified broad location, and finish with Call, Text or Free In-Home Estimate.
+
+### Facebook and Instagram acquisition readiness
+
+- **Organic:** cross-publish useful transformations and education, but adapt the first frame/caption to each platform. Respond promptly without soliciting private project details publicly.
+- **Lead-form ads:** use only after the owner defines qualification questions, consent disclosure, notification routing, response owner and secure data retention. Reconcile to qualified outcomes.
+- **Website conversion ads:** send each creative to the matching service page and optimize only after confirmed-lead tracking is tested.
+- **Retargeting:** do not enable until the owner supplies an approved Meta Business account, ad account, Pixel/Dataset ID, consent/privacy decision and audience-retention policy.
+- **Owner must supply:** account/admin access through platform roles (never passwords), budget/loss limit, creative authorization, photo/video rights, verified project facts, Pixel/Dataset ID, privacy/consent approval and qualified-lead criteria.
+- No fake Pixel ID, campaign, spend, private-account access or fabricated engagement is part of this repository.

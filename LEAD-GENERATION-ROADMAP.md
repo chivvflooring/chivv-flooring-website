@@ -41,3 +41,33 @@ Updated September 11, 2026. Objective: move a qualified Metro Atlanta homeowner 
 ## Success scorecard
 
 Review monthly: qualified leads, booked opportunities, qualification rate, confirmed estimate completion rate, phone/text inquiries, service/market mix, landing-page conversion rate, source/campaign completeness, cost per qualified lead (only if paid campaigns later launch), and reasons leads are unqualified. Protect trust: no fabricated locations, work, reviews, credentials, pricing, or claims.
+
+## Google Local Services Ads: post-approval workflow
+
+Verification, insurance/background checks and account eligibility remain entirely in Google's owner-controlled process and must never be bypassed. After legitimate approval:
+
+1. Owner verifies exact business identity, service categories, service areas, hours, phone, budget and lead settings against current account options.
+2. Use the canonical homepage or closest allowed service destination; add stable non-PII tagging only if the LSA interface permits it.
+3. Assign a response owner and target workflow: acknowledge, identify service/city/project fit, schedule follow-up, and record status securely.
+4. Reconcile charged leads to New, Contacted, Qualified, Estimate Scheduled/Sent, Won/Lost or Spam/Unqualified.
+5. Use Google's legitimate dispute process for actually invalid leads; never misclassify valid inquiries merely to avoid charges.
+6. Compare qualification and won outcomes—not raw lead count—with GBP, organic and Search Ads.
+7. Recheck landing experience, phone routing, business hours and service coverage monthly.
+
+## Channel prioritization matrix
+
+Scores are relative (High/Medium/Low), not forecasts.
+
+| Rank | Channel | Purchase intent | Speed to lead | Controllability | Measurement | Owner work |
+|---:|---|---|---|---|---|---|
+| 1 | GBP / Maps | High | Medium | Medium | Medium–High with UTMs/log | High ongoing |
+| 2 | Referrals / genuine reviews | High | Medium | Low–Medium | Medium | High relationship work |
+| 3 | Google LSA after approval | High | Fast once active | Medium | High with lead log | High response/compliance |
+| 4 | Google Search Ads | High when tightly targeted | Fast | High | High after validation | High budget/optimization |
+| 5 | Google organic | High on service queries | Slow | Medium | High via Search Console/funnel | Medium ongoing |
+| 6 | Instagram organic | Medium | Slow/variable | Medium | Medium with UTMs | High creative |
+| 7 | Facebook organic | Low–Medium | Slow/variable | Medium | Medium | High community work |
+| 8 | Instagram paid | Medium | Fast | High | High after setup | High creative/budget |
+| 9 | Facebook paid | Medium | Fast | High | High after setup | High creative/budget |
+
+Ordering should change when real cost, qualification and won-revenue data exist. Visual paid social should not outrank high-intent search merely on cheap form leads.

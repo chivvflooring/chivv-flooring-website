@@ -17,6 +17,8 @@ const htmlFiles = files.filter((file) => file.endsWith('.html'));
 const errors = [];
 const warnings = [];
 const canonicalUrls = new Set();
+const titles = new Map();
+const descriptions = new Map();
 
 for (const file of htmlFiles) {
   const relative = path.relative(root, file);
@@ -27,6 +29,14 @@ for (const file of htmlFiles) {
   if (count(/<title>[^<]+<\/title>/gi) !== 1) errors.push(`${relative}: expected one title`);
   if (count(/<meta name="description" content="[^"]+">/gi) !== 1) errors.push(`${relative}: expected one meta description`);
   if (count(/<h1(?:\s[^>]*)?>[\s\S]*?<\/h1>/gi) !== 1) errors.push(`${relative}: expected one h1`);
+  if (!/<html\s+lang="en"/i.test(html)) errors.push(`${relative}: missing English document language`);
+  if (!html.includes('class="skip-link" href="#main-content"') || !/<main\s+id="main-content">/i.test(html)) {
+    errors.push(`${relative}: missing keyboard skip link or main landmark target`);
+  }
+  const title = html.match(/<title>([^<]+)<\/title>/i)?.[1];
+  const description = html.match(/<meta name="description" content="([^"]+)">/i)?.[1];
+  if (title) (titles.get(title) || titles.set(title, []).get(title)).push(relative);
+  if (description) (descriptions.get(description) || descriptions.set(description, []).get(description)).push(relative);
   if (!html.includes('678-571-7028') || !html.includes('tel:+16785717028')) errors.push(`${relative}: missing required phone CTA`);
   if (!html.includes('sms:+16785717028')) errors.push(`${relative}: missing required text CTA`);
   if (relative === 'index.html' || relative.startsWith('services/') || relative.startsWith('areas/')) {
@@ -34,6 +44,7 @@ for (const file of htmlFiles) {
     if (!heroActions.includes('contact.html') || !heroActions.includes('tel:+16785717028') || !heroActions.includes('sms:+16785717028')) {
       errors.push(`${relative}: hero must offer Estimate, Call, and Text actions`);
     }
+    if (!heroActions.includes('REQUEST A FREE IN-HOME ESTIMATE')) errors.push(`${relative}: hero is missing the primary CTA language`);
   }
   if (html.includes('https://www.chivvflooring.com')) errors.push(`${relative}: found forbidden www canonical hostname`);
   if (!isUtilityPage) {
@@ -76,11 +87,15 @@ for (const file of htmlFiles) {
         errors.push(`${relative}: structured data does not reference the canonical business entity`);
       }
       if (/"(?:streetAddress|postalCode)"/.test(serialized)) errors.push(`${relative}: unverified street address in structured data`);
+      if (/"(?:aggregateRating|review|priceRange)"/.test(serialized)) errors.push(`${relative}: unverified trust or pricing claim in structured data`);
     } catch (error) {
       errors.push(`${relative}: invalid JSON-LD (${error.message})`);
     }
   }
 }
+
+for (const [value, pages] of titles) if (pages.length > 1) errors.push(`duplicate title on ${pages.join(', ')}: ${value}`);
+for (const [value, pages] of descriptions) if (pages.length > 1) errors.push(`duplicate meta description on ${pages.join(', ')}: ${value}`);
 
 for (const required of ['index.html', 'robots.txt', 'sitemap.xml', '_headers']) {
   if (!fs.existsSync(path.join(root, required))) errors.push(`missing required file: ${required}`);
