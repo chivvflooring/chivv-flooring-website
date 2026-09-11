@@ -29,3 +29,32 @@ The inherited site had a sound static foundation: unique canonicals, indexable-p
 6. Verify the apex-domain Search Console property, submit `https://chivvflooring.com/sitemap.xml`, and inspect priority URLs after an approved deployment.
 7. Confirm Netlify notification recipients and submit one real end-to-end lead on the deployed site, including an allowed photo, to validate delivery and the thank-you conversion.
 8. Replace or expand the two current project images only with CHIVV-owned photography and approved factual descriptions. Provide verified address, licensing, insurance, financing, warranty, and credential information before any such claims are added.
+
+# Phase 4 Customer Acquisition Audit and Implementation Record
+
+Updated September 11, 2026. The repository was audited from the Phase 3 production commit. The execution environment could not connect to the public domain through its network proxy, so live headers, deployed Netlify processing, analytics vendor delivery, and real-device rendering require owner verification after deployment.
+
+## Scope and findings
+
+The audit rechecked all 26 HTML documents: homepage, contact/estimate, confirmation, 404, about/reputation pages, eight priority service guides, and thirteen service-area pages. It also covered shared navigation/footer/mobile actions, all internal asset and page references, titles, descriptions, H1 counts, canonical mappings, JSON-LD parsing/business references, sitemap parity, robots directives, responsive CSS, image dimensions/alternative text, Netlify form markup, optional upload, attribution storage, and conversion event logic.
+
+Phase 3's page coverage, local content, funnel fields, CTAs, canonicals, sitemap, and privacy protections were sound. The genuine defect found was that `page_context` on the submitted form always became `/contact.html`; therefore an estimate begun on a service or location page lost that source-page context. Confirmed `generate_lead` events also lacked landing, source-page, referrer, and campaign dimensions even though the form submission retained them.
+
+The visible Text action was also confined to the mobile action bar on the homepage, six inherited service pages, and five inherited area pages. Desktop visitors on those pages did not have Text beside the primary Estimate and Call choices.
+
+## Phase 4 changes
+
+- Estimate CTA clicks now retain the non-sensitive source path for 30 minutes. The form uses that path as `page_context`, with the contact path as a safe fallback for direct visits.
+- Added Text beside Estimate and Call in the hero of every service and location page and on the homepage, giving desktop, tablet, and mobile visitors the same short conversion choices.
+- Form-attempt and confirmed-lead events now carry the allowed landing, source-page, referrer-host, and UTM attribution dimensions. The short-lived confirmation marker remains mandatory, is consumed once, and contains no name, email, phone, city, service selection, project description, photo, or other form response.
+- Automated attribution tests now exercise an Instagram-tagged service arrival, estimate CTA transition, form attempt, confirmed lead, refresh deduplication, campaign replacement, blocked storage, malformed storage, expiration, and direct traffic.
+- The repository audit now enforces exact canonical-to-file mapping, parses JSON-LD, rejects structured street/postal addresses, confirms the shared business entity reference, requires exact sitemap parity, checks robots directives, and validates the Netlify POST/multipart/honeypot/thank-you configuration.
+- Added owner-ready Google Business Profile, social lead, and multichannel lead-generation plans. They explicitly separate repository work from owner-controlled accounts and prohibit invented profiles, IDs, locations, reviews, project claims, and ad spend.
+
+## Owner verification required
+
+1. Deploy only after review, then submit one genuine test estimate (including an allowed photo) and verify Netlify receipt, notification, redirect, and one confirmed lead event.
+2. Supply an owner-controlled GA4 Measurement ID (`G-...`) or GTM Web Container ID (`GTM-...`), required access, consent/privacy requirements, and approved event mappings. No identifier was present, so none was invented.
+3. Validate desktop, tablet, and mobile behavior on real browsers/devices; verify phone and SMS handlers on devices that support them.
+4. Complete the legitimate GBP actions in `GOOGLE-BUSINESS-PROFILE-PLAN.md`; verify social accounts before adding URLs; do not create city offices or profiles.
+5. Confirm the deployed sitemap status and priority URL indexing in the already owner-controlled apex Search Console property. No DNS or ownership changes are part of this work.
