@@ -80,17 +80,31 @@ document.addEventListener('DOMContentLoaded', function(){
     } catch(error) { source.referrer_host = ''; }
     try { window.sessionStorage.setItem(sourceStorageKey, JSON.stringify(source)); } catch(error) {}
   }
+  const pageContext = window.location.pathname || '/';
   const estimateForm = document.querySelector('form[name="estimate-request"]');
   if(estimateForm){
     sourceKeys.concat(['landing_page','referrer_host']).forEach(function(key){
       const field = estimateForm.querySelector('[name="' + key + '"]');
       if(field) field.value = typeof source[key] === 'string' ? source[key].slice(0,500) : '';
     });
+    const contextField = estimateForm.querySelector('[name="page_context"]');
+    if(contextField) contextField.value = pageContext.slice(0,500);
+    const requestedService = (params.get('service') || '').slice(0,100);
+    const serviceField = estimateForm.querySelector('[name="service"]');
+    if(requestedService && serviceField){
+      Array.from(serviceField.options).some(function(option){
+        if(option.value.toLowerCase() === requestedService.toLowerCase()){
+          serviceField.value = option.value;
+          return true;
+        }
+        return false;
+      });
+    }
     estimateForm.addEventListener('submit', function(){
       // An attempt is not a delivered lead. Confirm delivery in Netlify before reporting conversions.
       try { window.sessionStorage.setItem(pendingLeadKey, String(Date.now())); } catch(error) {}
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({event:'estimate_form_attempt', form_name:'estimate-request'});
+      window.dataLayer.push({event:'estimate_form_attempt', form_name:'estimate-request', page_context:pageContext});
     });
   }
 
@@ -111,7 +125,19 @@ document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('a[href^="tel:"]').forEach(function(link){
     link.addEventListener('click', function(){
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({event:'phone_click', phone_number:'678-571-7028'});
+      window.dataLayer.push({event:'phone_click', phone_number:'678-571-7028', page_context:pageContext});
+    });
+  });
+  document.querySelectorAll('a[href^="sms:"]').forEach(function(link){
+    link.addEventListener('click', function(){
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({event:'text_click', phone_number:'678-571-7028', page_context:pageContext});
+    });
+  });
+  document.querySelectorAll('a[href*="contact.html"]').forEach(function(link){
+    link.addEventListener('click', function(){
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({event:'estimate_cta_click', page_context:pageContext});
     });
   });
 });
